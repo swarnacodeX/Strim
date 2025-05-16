@@ -32,22 +32,21 @@ router.post("/login", async (req, res) => {
 
 // Register
 router.post("/register", async (req, res) => {
-  const { email, password, firstname, lastname } = req.body;
+  const { email, password, firstname, lastname,role } = req.body;
   const hashedPassword = Hashing(password);
   const accesstoken = uuidv4();
-
   try {
     const existing = await User.findOne({ email });
     if (existing) {
       return res.status(400).json({ error: "Email already exists" });
     }
-
     const newUser = new User({
       email,
       password: hashedPassword,
       firstname,
       lastname,
-      accesstoken
+      accesstoken,
+      role,
     });
 
     await newUser.save();

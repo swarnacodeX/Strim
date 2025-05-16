@@ -5,7 +5,9 @@ const userSchema = new mongoose.Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   password: { type: String, required: true },
-  accesstoken: { type: String, required: true }
+  accesstoken: { type: String, required: true },
+  role: {type: String, required:true},
+  secretToken:{type: String},
 });
 
 const User = mongoose.model('User', userSchema);

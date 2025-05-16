@@ -1,21 +1,27 @@
 import express from "express";
-import db from "../db.js"; // Should be a pg.Pool or pg.Client
+import db from "../db.js";
 import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();
 
 // New Post
-router.post("/newpost", async (req, res) => {
-  const { probs, username, email } = req.body;
-  const randomId = uuidv4();
-  const query =
-    "INSERT INTO posts (idprobs, probstxt, probsusername, probsemail) VALUES ($1, $2, $3, $4)";
-  try {
-    await db.query(query, [randomId, probs, username, email]);
-    res.status(201).send("posted");
-  } catch (err) {
+router.post("/newItem", async (req, res) => {
+  try{
+  const itemId = uuidv4();
+  const Item=new Item({
+    email:req.body.email,
+    itemId:itemId,
+    itemName:req.body.itemName,
+    itemImage:req.body.itemImage,
+    itemPrice:req.body.itemPrice,
+    itemCategory:req.body.itemCategory,
+    itemDescription:req.body.itemDescription,
+  })
+  await Item.save();
+  res.status(201).json({ message: "Item created successfully", itemId });}
+catch (err) {
     console.error(err);
-    res.status(500).send("Error posting.");
+    res.status(500).send("Error posting item.");
   }
 });
 

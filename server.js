@@ -8,7 +8,7 @@ import connectDB from "./db.js"; // ✅ Import the connection function
 
 import authRoutes from "./routes/auth.users.js";
 import chatRoutes from "./routes/chat.js";
-import postRoutes from "./routes/posts.js";
+import itemRoutes from "./routes/items.items.js";
 import { Server } from "socket.io";
 
 const app = express();
@@ -31,7 +31,7 @@ app.use(cors({
 // API routes
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
-app.use("/api/posts", postRoutes);
+app.use("/api/items", itemRoutes);
 
 // Socket.IO logic
 io.on('connection', (socket) => {
