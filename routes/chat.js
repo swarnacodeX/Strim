@@ -1,5 +1,5 @@
 import express from "express";
-import db from "../db.js"; // Should be a pg.Pool or pg.Client
+import db from "../mongodb.connect.js"; // Should be a pg.Pool or pg.Client
 import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();

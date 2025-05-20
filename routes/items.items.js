@@ -1,5 +1,5 @@
 import express from "express";
-import db from "../db.js";
+import db from "../mongodb.connect.js";
 import { v4 as uuidv4 } from "uuid";
 
 const router = express.Router();

@@ -2,7 +2,7 @@ import express from "express";
 import crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import User from "../models/UserModel.js";
-
+import SecretToken from "../models/Secret-TokenModel.js";
 const router = express.Router();
 
 function Hashing(password) {
@@ -12,34 +12,66 @@ function Hashing(password) {
 
 // Login
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password ,role,secretToken} = req.body;
   const hashedPassword = Hashing(password);
-  const accesstoken = uuidv4();
-
-  try {
+ 
+  if(role=="Admin"){
+    const secretTokenData=await SecretToken.findOne({token:secretToken});
+    if(secretTokenData){
+        try {
     const user = await User.findOne({ email, password: hashedPassword });
     if (!user) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
+     const accesstoken = uuidv4();
     user.accesstoken = accesstoken;
     await user.save();
-    res.json({ accesstoken });
+    res.json({ accesstoken ,firstname:user.firstname,role});
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+    }}
+    else{
+      try{
+        const user=await User.findOne({email,password:hashedPassword});
+        if(user){
+           const accesstoken = uuidv4();
+          user.accesstoken=accesstoken;
+          await user.save();
+          res.json({accesstoken,firstname:user.firstname,role:user.role});
+        }
+      }catch(err){
+        console.error("Login error:", err);
+        res.status(401).json({ error:"User role, invalid email/password" });
+      }
+    }
+  }
+
+);
 
 // Register
+// Register
 router.post("/register", async (req, res) => {
-  const { email, password, firstname, lastname,role } = req.body;
+  const { email, password, firstname, lastname, role, secretToken } = req.body;
   const hashedPassword = Hashing(password);
   const accesstoken = uuidv4();
+
   try {
     const existing = await User.findOne({ email });
     if (existing) {
       return res.status(400).json({ error: "Email already exists" });
     }
+
+    // If role is Admin, validate the secretToken
+    if (role === "Admin") {
+      const tokenExists = await SecretToken.findOne({ token: secretToken });
+      if (!tokenExists) {
+        return res.status(403).json({ error: "Invalid secret token for Admin registration" });
+      }
+    }
+
+    // Proceed with user creation
     const newUser = new User({
       email,
       password: hashedPassword,

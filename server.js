@@ -4,8 +4,7 @@ import { createServer } from "http";
 import dotenv from "dotenv";
 dotenv.config();
 
-import connectDB from "./db.js"; // ✅ Import the connection function
-
+import connectDB from "./mongodb.connect.js"; // ✅ Import the connection function
 import authRoutes from "./routes/auth.users.js";
 import chatRoutes from "./routes/chat.js";
 import itemRoutes from "./routes/items.items.js";

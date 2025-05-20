@@ -8,7 +8,7 @@ itemImage:{type: String,required:true},
 itemPrice:{type: String,required:true},
 itemCategory:{type: String,required:true},
 itemDescription:{type: String,required:true},
+});
 
-})
 const Item= mongoose.model('Item',itemSchema);
 export default Item;
