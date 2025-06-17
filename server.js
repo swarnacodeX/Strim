@@ -22,7 +22,7 @@ connectDB(); // ✅ Call the function to connect
 
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "*",
   methods: ["GET", "POST"],
   credentials: true
 }));
