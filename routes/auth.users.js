@@ -6,7 +6,7 @@ import SecretToken from "../models/Secret-TokenModel.js";
 const router = express.Router();
 
 function Hashing(password) {
-  const key = crypto.pbkdf2Sync(password, process.env.salt, 100000, 64, "sha512");
+  const key = crypto.pbkdf2Sync(password, "kejbv8734r2yhfkebf", 100000, 64, "sha512");
   return key.toString('hex');
 }
 
