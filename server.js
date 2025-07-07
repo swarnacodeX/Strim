@@ -7,9 +7,9 @@ dotenv.config();
 import connectDB from "./mongodb.connect.js"; // ✅ Import the connection function
 import authRoutes from "./routes/auth.users.js";
 import chatRoutes from "./routes/chat.js";
-import itemRoutes from "./routes/items.items.js";
+import itemRoutes from "./routes/items.Listing.js";
 import { Server } from "socket.io";
-
+import paymentRoutes from "./routes/payment-gateway.js";
 const app = express();
 const port = 2400;
 const socketport = 2401;
@@ -18,11 +18,11 @@ const server = createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
 // Connect to MongoDB
-connectDB(); // ✅ Call the function to connect
+connectDB();
 
 app.use(express.json());
 app.use(cors({
-  origin: "*",
+  origin: "http://localhost:5173", // Adjust this to your frontend URL
   methods: ["GET", "POST"],
   credentials: true
 }));
@@ -31,6 +31,7 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/items", itemRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // Socket.IO logic
 io.on('connection', (socket) => {
